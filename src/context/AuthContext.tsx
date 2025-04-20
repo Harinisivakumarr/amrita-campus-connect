@@ -15,6 +15,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, role: 'admin' | 'faculty' | 'student', fullName: string) => Promise<void>;
   logout: () => Promise<void>;
+  hasAccess: (requiredRoles: ('admin' | 'faculty' | 'student')[]) => boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -84,8 +85,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (error) throw error;
   };
 
+  // Helper function to check if the user has the required role
+  const hasAccess = (requiredRoles: ('admin' | 'faculty' | 'student')[]) => {
+    if (!user) return false;
+    return requiredRoles.includes(user.role);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, hasAccess }}>
       {children}
     </AuthContext.Provider>
   );

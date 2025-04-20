@@ -10,7 +10,7 @@ const Login: React.FC = () => {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold animate-fade-in">
             <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-              A-Reserve
+              Amrita Campus Radar
             </span>
           </h1>
           <p className="text-foreground/70 mt-2 animate-fade-in" style={{ animationDelay: '0.1s' }}>

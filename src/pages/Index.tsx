@@ -38,7 +38,7 @@ const Index: React.FC = () => {
             <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
               Welcome to{' '}
               <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                A-Reserve
+                Amrita Campus Radar
               </span>
             </h1>
             <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto animate-slide-up">
@@ -82,7 +82,7 @@ const Index: React.FC = () => {
       <section className="py-20 px-4 bg-secondary/30">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">
-            What A-Reserve Offers
+            What Amrita Campus Radar Offers
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

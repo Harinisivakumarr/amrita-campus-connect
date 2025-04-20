@@ -3,10 +3,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import RoleBasedRoute from "@/components/auth/RoleBasedRoute";
 
 // Pages
 import Index from "./pages/Index";
@@ -33,9 +34,26 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/classrooms" element={<Classrooms />} />
-                <Route path="/canteen" element={<Canteen />} />
-                <Route path="/faculty" element={<Faculty />} />
+                
+                {/* Role-based routes */}
+                <Route path="/classrooms" element={
+                  <RoleBasedRoute allowedRoles={['admin', 'faculty', 'student']}>
+                    <Classrooms />
+                  </RoleBasedRoute>
+                } />
+                
+                <Route path="/canteen" element={
+                  <RoleBasedRoute allowedRoles={['admin', 'faculty', 'student']}>
+                    <Canteen />
+                  </RoleBasedRoute>
+                } />
+                
+                <Route path="/faculty" element={
+                  <RoleBasedRoute allowedRoles={['admin', 'faculty']}>
+                    <Faculty />
+                  </RoleBasedRoute>
+                } />
+                
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
