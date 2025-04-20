@@ -95,12 +95,21 @@ const Classrooms: React.FC = () => {
     return matchesSearch && matchesStatus;
   });
 
+  // Determine user permissions based on role
+  const canReserve = user?.role === 'faculty' || user?.role === 'admin';
+  const canRelease = user?.role === 'faculty' || user?.role === 'admin';
+
   return (
     <div className="container mx-auto py-20 px-4">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4 animate-fade-in">Classroom Availability</h1>
         <p className="text-foreground/70 animate-slide-up">
           View and manage classrooms across campus in real-time.
+          {user?.role === 'student' && (
+            <span className="block mt-2 text-sm text-muted-foreground">
+              Note: As a student, you can only view classroom information.
+            </span>
+          )}
         </p>
       </div>
 
@@ -178,8 +187,8 @@ const Classrooms: React.FC = () => {
             <div key={classroom.id} className="animate-scale-in" style={{ animationDelay: `${index * 0.05}s` }}>
               <ClassroomCard
                 {...classroom}
-                onReserve={user?.role === 'student' || user?.role === 'faculty' || user?.role === 'admin' ? handleReserveRoom : undefined}
-                onRelease={user?.role === 'faculty' || user?.role === 'admin' ? handleReleaseRoom : undefined}
+                onReserve={canReserve ? handleReserveRoom : undefined}
+                onRelease={canRelease ? handleReleaseRoom : undefined}
               />
             </div>
           ))}

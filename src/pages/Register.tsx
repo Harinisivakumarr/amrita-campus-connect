@@ -8,7 +8,7 @@ const Register: React.FC = () => {
     <div 
       className="min-h-screen flex flex-col items-center justify-center p-4 bg-cover bg-center" 
       style={{ 
-        backgroundImage: "url('https://www.amrita.edu/wp-content/uploads/2021/06/amritapuri-new.jpg')",
+        backgroundImage: "url('/lovable-uploads/51dfdce3-58a2-4575-9428-570ac3e281d2.png')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
