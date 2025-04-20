@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { AlertCircle } from 'lucide-react';
 
 type AuthFormProps = {
   isLogin?: boolean;
@@ -18,6 +19,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
   const [fullName, setFullName] = useState('');
   const [role, setRole] = useState<'student' | 'faculty' | 'admin'>('student');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   const { login, register } = useAuth();
   const navigate = useNavigate();
@@ -25,18 +27,38 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
     
     try {
       if (isLogin) {
         await login(email, password);
         toast.success('Successfully logged in!');
+        navigate('/');
       } else {
         await register(email, password, role, fullName);
         toast.success('Successfully registered!');
+        
+        // Only navigate if no email confirmation is required
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          navigate('/');
+        }
       }
-      navigate('/');
-    } catch (err) {
-      toast.error(isLogin ? 'Login failed. Please try again.' : 'Registration failed. Please try again.');
+    } catch (err: any) {
+      console.error("Auth error:", err);
+      
+      // Format error message for display
+      let errorMessage = "Authentication failed. Please try again.";
+      if (err.message) {
+        if (err.message.includes("Email not confirmed")) {
+          errorMessage = "Please verify your email before logging in.";
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -48,6 +70,13 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
         {isLogin ? 'Login to Amrita Campus Radar' : 'Create an Account'}
       </h2>
       
+      {error && (
+        <div className="bg-destructive/15 text-destructive p-3 rounded-md mb-4 flex items-center gap-2">
+          <AlertCircle size={16} />
+          <p className="text-sm">{error}</p>
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -58,6 +87,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             required
+            disabled={isLoading}
           />
         </div>
         
@@ -70,6 +100,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             required
+            disabled={isLoading}
           />
         </div>
         
@@ -84,6 +115,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="John Doe"
                 required
+                disabled={isLoading}
               />
             </div>
             
@@ -92,6 +124,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ isLogin = true }) => {
               <Select 
                 value={role} 
                 onValueChange={(value) => setRole(value as 'student' | 'faculty' | 'admin')}
+                disabled={isLoading}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />

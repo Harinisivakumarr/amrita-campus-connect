@@ -5,8 +5,15 @@ import AuthForm from '@/components/auth/AuthForm';
 
 const Login: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div 
+      className="min-h-screen flex flex-col items-center justify-center p-4 bg-cover bg-center" 
+      style={{ 
+        backgroundImage: "url('https://www.amrita.edu/wp-content/uploads/2021/06/amritapuri-new.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="w-full max-w-md backdrop-blur-sm bg-background/70 p-6 rounded-lg shadow-xl">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold animate-fade-in">
             <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
